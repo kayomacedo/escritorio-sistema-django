@@ -1,0 +1,112 @@
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <title>Registro de Novo Documento</title>
+    {% tailwind_css %}
+</head>
+<body class="font-sans bg-gray-100">
+
+    <!-- Incluindo o componente do topo -->
+    {% include 'componentes/nav-bar.html'%}
+
+    <div class="container mx-auto mt-8 p-8 bg-white rounded shadow-md">
+        <h2 class="text-2xl text-center font-semibold mb-8">Registrar Documento</h2>
+        <form method="post" action="#" class="space-y-4">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="titulo" class="block text-sm font-medium text-gray-600">Título:</label>
+                <input type="text" class="mt-1 p-2 w-full border rounded-md" id="titulo" name="titulo" placeholder="Digite o título do documento" required>
+            </div>
+
+            <div class="form-group">
+                <label for="resumo" class="block text-sm font-medium text-gray-600">Resumo:</label>
+                <textarea class="mt-1 p-2 w-full border rounded-md" id="resumo" rows="3" name="resumo" placeholder="Digite um resumo do documento" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="pessoas_envolvidas" class="block text-sm font-medium text-gray-600">Pessoas Envolvidas:</label>
+                <select class="mt-1 p-2 w-full border rounded-md" id="pessoas_envolvidas" name="pessoas_envolvidas" multiple required>
+                    {% for pessoa in pessoas %}
+                        <option value="{{ pessoa.id }}">{{ pessoa.nome }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" id="adicionarPessoaBtn" class="mt-2 bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-md  focus:outline-none focus:shadow-outline-blue active:bg-blue-800">Adicionar Pessoa</button>
+            </div>
+
+            <div class="form-group">
+                <label for="endereco" class="block text-sm font-medium text-gray-600">Endereço:</label>
+                <input type="text" class="mt-1 p-2 w-full border rounded-md" id="endereco" name="endereco" placeholder="Endereço do documento" required>
+            </div>
+
+            <div class="form-group">
+                <label for="data_documento" class="block text-sm font-medium text-gray-600">Data do Documento:</label>
+                <input type="date" class="mt-1 p-2 w-full border rounded-md" id="data_documento" name="data_documento" required>
+            </div>
+
+            <div class="form-group">
+                <label for="tamanho_area" class="block text-sm font-medium text-gray-600">Tamanho da Área:</label>
+                <input type="text" class="mt-1 p-2 w-full border rounded-md" id="tamanho_area" name="tamanho_area" placeholder="Digite o tamanho da área" required>
+            </div>
+
+            <div class="form-group">
+                <label for="local_armazenamento" class="block text-sm font-medium text-gray-600">Onde Está Guardado:</label>
+                <input type="text" class="mt-1 p-2 w-full border rounded-md" id="local_armazenamento" name="local_armazenamento" placeholder="Digite o local de armazenamento" required>
+            </div>
+
+            <button type="submit" class="w-full  bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue active:bg-blue-800">
+                Registrar Documento
+            </button>
+        </form>
+    </div>
+
+    <!-- Modal para adicionar pessoa -->
+    <div id="modalAdicionarPessoa" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+        <div class="bg-white p-8 rounded shadow-md">
+            <h2 class="text-2xl font-semibold mb-4">Adicionar Pessoa Existente</h2>
+            <select id="pessoasCadastradas" class="mt-1 p-2 w-full border rounded-md" multiple>
+                {% for pessoa in todas_pessoas %}
+                    <option value="{{ pessoa.id }}">{{ pessoa.nome }}</option>
+                {% endfor %}
+            </select>
+            <button type="button" id="concluirAdicaoPessoa" class="mt-4 bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:shadow-outline-green active:bg-green-800">Concluir</button>
+            <button type="button" id="cancelarAdicaoPessoa" class="mt-2 bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 focus:outline-none focus:shadow-outline-gray active:bg-gray-800">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Exibir modal ao clicar em Adicionar Pessoa
+            $("#adicionarPessoaBtn").click(function() {
+                $("#modalAdicionarPessoa").removeClass("hidden");
+            });
+
+            // Fechar modal ao clicar em Concluir no modal
+            $("#concluirAdicaoPessoa").click(function() {
+                // Lógica para adicionar a pessoa selecionada ao campo de pessoas_envolvidas
+                $("#pessoasCadastradas option:selected").each(function() {
+                    $("#pessoas_envolvidas").append('<option value="' + $(this).val() + '">' + $(this).text() + '</option>');
+                });
+
+                // Fechar o modal
+                $("#modalAdicionarPessoa").addClass("hidden");
+            });
+
+            // Fechar modal ao clicar em Cancelar no modal
+            $("#cancelarAdicaoPessoa").click(function() {
+                // Fechar o modal
+                $("#modalAdicionarPessoa").addClass("hidden");
+            });
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
