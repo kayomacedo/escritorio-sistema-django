@@ -9,5 +9,8 @@ urlpatterns = [
     path('excluir_documento/<int:documento_id>/', views.excluir_documento, name='excluir_documento'),
     path('pesquisar_documentos/', views.pesquisar_documentos, name='pesquisar_documentos'),
     path('relatorio/', views.relatorio, name='relatorio_documentos'),
+    path('atualizar_documento/', views.atualizar_documento, name='atualizar_documento'),
+    
+
 
 ]

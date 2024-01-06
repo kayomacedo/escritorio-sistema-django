@@ -5,6 +5,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 
 from documento.models import Documento
+from sistema.models import Team, UserProfile
 
 # Create your views here.
 
@@ -21,6 +22,7 @@ def registro_usuario(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
+        team= (f'{username}team')
 
         # Verifica se todos os campos estão preenchidos
         if not (username and email and password and confirm_password):
@@ -38,8 +40,14 @@ def registro_usuario(request):
         
         # Cria e salva o usuário
         try:
+            # Obter ou criar um time (altere 'Nome do Time' conforme necessário)
+            team, criado = Team.objects.get_or_create(name=team)
+            # Adicionar o usuário ao time
             user = User.objects.create_user(username=username, email=email, password=password)
             user.save()
+             # Crie um UserProfile associado ao usuário e ao time
+            perfil = UserProfile.objects.create(user=user, team=team)
+            perfil.save()
             return render(request, 'registro_usuario.html', {'success_message': 'Novo usuário registrado!'})
         except Exception as e:
             return render(request, 'registro_usuario.html', {'error_message': f'Erro: {e}'})
@@ -78,11 +86,16 @@ def login_usuario(request):
 
 @login_required(login_url='/login/') 
 def home(request):
-      # Obtenha a contagem real de documentos cadastrados
+    #peguei o time do usuario logado
+    team = request.user.userprofile.team
+ 
+    # Obtenha a contagem real de documentos cadastrados
     numero_de_documentos = Documento.objects.count()  # Ajuste conforme necessário
-
+    meus_documentos = Documento.objects.filter(team=team).count()
     context = {
         'numero_de_documentos': numero_de_documentos,
+        'meus_documentos': meus_documentos,
+        'team':team.name
     }
 
     return render(request,'home.html', context)

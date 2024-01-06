@@ -1,21 +1,45 @@
 {% load static tailwind_tags %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatório</title>
     {% tailwind_css %}
 </head>
-<body>
+
+<body class="bg-gray-100 font-sans">
+
     <header>
         <!-- Top Navigation Menu -->
-        {% include 'componentes/nav-bar.html'%}
+        {% include 'componentes/nav-bar.html' %}
     </header>
-    <main>
-        <h2 class="text-2xl text-center font-semibold mb-8">Funcionalidade de envio de relatório ainda não foi implementada.</h2>
-        
+
+    <main class="container mx-auto max-w-screen-lg mt-8 p-8">
+        <div class="flex items-center flex-col gap-4">
+            <div class="text-center mb-8">
+                <h3 class="text-2xl font-semibold">Os relatórios serão enviados para o seu email</h3>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <a href="#" class="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-md block text-center">
+                    Relatório do Dia
+                </a>
+                <a href="#" class="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-md block text-center">
+                    Relatório do Mês
+                </a>
+                <a href="#" class="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-md block text-center">
+                    Relatório do Ano
+                </a>
+                <a href="#" class="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-md block text-center">
+                    Relatório do Todo
+                </a>
+            </div>
+        </div>
     </main>
-    
+
 </body>
-</html>l
+
+</html>
